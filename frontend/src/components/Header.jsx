@@ -5,6 +5,7 @@ import { AiFillHome } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atom/userAtom";
+import { BsFillChatDotsFill } from "react-icons/bs";
 
 const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -26,9 +27,14 @@ const Header = () => {
       />
 
       {user && (
-        <Link to={`/${user.username}`}>
-          <RxAvatar size={24} />
-        </Link>
+        <Flex alignItems={"center"} gap={4}>
+          <Link to={`/${user.username}`}>
+            <RxAvatar size={24} />
+          </Link>
+          <Link to={"/chat"}>
+            <BsFillChatDotsFill size={24} />
+          </Link>
+        </Flex>
       )}
     </Flex>
   );
