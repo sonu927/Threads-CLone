@@ -30,7 +30,7 @@ async function sendMessage(req, res) {
 
     await Promise.all([
       newMessage.save(),
-      Conversation.updateOne({
+      conversation.updateOne({
         lastMessage: {
           text: message,
           sender: senderId,
@@ -66,8 +66,9 @@ async function getMessages(req, res) {
   }
 }
 
-async function getConversations(req, res) {
+const getChats = async (req, res) => {
   const userId = req.user._id;
+  //return res.status(200).json({ message: "working", userId: userId });
   try {
     const conversations = await Conversation.find({
       participants: userId,
@@ -76,10 +77,17 @@ async function getConversations(req, res) {
       select: "username profilePic",
     });
 
-    return res.status(200).json(conversations);
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-}
+    //remove the logged in user from the participants array
+    conversations.forEach((conversation) => {
+      conversation.participants = conversation.participants.filter(
+        (participant) => participant._id.toString() !== userId.toString()
+      );
+    });
 
-export { sendMessage, getMessages, getConversations };
+    res.status(200).json(conversations);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export { sendMessage, getMessages, getChats };

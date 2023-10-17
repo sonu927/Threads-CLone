@@ -9,12 +9,38 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BiConversation } from "react-icons/bi";
 import Conversation from "../components/Conversation";
 import MessageContainer from "../components/MessageContainer";
+import useShowToast from "../hooks/useShowToast";
+import { useRecoilState } from "recoil";
+import { chatsAtom, selectedChatAtom } from "../atom/messageAtom";
 
 const ChatPage = () => {
+  const showToast = useShowToast();
+  const [loadingChats, setLoadingChats] = useState(true);
+  const [chats, setChats] = useRecoilState(chatsAtom);
+  const [selectedChat, setSelectedChat] = useRecoilState(selectedChatAtom);
+  useEffect(() => {
+    const getChats = async () => {
+      try {
+        const res = await fetch("/api/messages/chats");
+        const data = await res.json();
+        if (data.error) {
+          showToast("Error", data.message, "error");
+          return;
+        }
+        setChats(data);
+      } catch (error) {
+        showToast("Error", error.message, "error");
+      } finally {
+        setLoadingChats(false);
+      }
+    };
+    getChats();
+  }, [setChats]);
+
   return (
     <Box
       position={"absolute"}
@@ -61,7 +87,7 @@ const ChatPage = () => {
             </Flex>
           </form>
 
-          {false &&
+          {loadingChats &&
             [0, 1, 2, 3, 4].map((_, i) => (
               <Flex key={i} gap={2} alignItems={"center"}>
                 <Box>
@@ -74,23 +100,25 @@ const ChatPage = () => {
               </Flex>
             ))}
 
-          <Conversation />
-          <Conversation />
-          <Conversation />
+          {!loadingChats &&
+            chats.map((chat) => <Conversation key={chat._id} chat={chat} />)}
         </Flex>
-        {/* <Flex
-          direction={"column"}
-          flex={70}
-          alignItems={"center"}
-          justifyContent={"center"}
-          h={"400px"}
-          p={4}
-          borderRadius={"md"}
-        >
-          <BiConversation size={100} />
-          <Text fontSize={20}>Select a conversation to start messaging</Text>
-        </Flex> */}
-        <MessageContainer />
+        {!selectedChat._id && (
+          <Flex
+            direction={"column"}
+            flex={70}
+            alignItems={"center"}
+            justifyContent={"center"}
+            h={"400px"}
+            p={4}
+            borderRadius={"md"}
+          >
+            <BiConversation size={100} />
+            <Text fontSize={20}>Select a conversation to start messaging</Text>
+          </Flex>
+        )}
+
+        {selectedChat._id && <MessageContainer />}
       </Flex>
     </Box>
   );
