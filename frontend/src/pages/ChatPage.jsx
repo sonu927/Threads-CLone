@@ -14,14 +14,21 @@ import { BiConversation } from "react-icons/bi";
 import Conversation from "../components/Conversation";
 import MessageContainer from "../components/MessageContainer";
 import useShowToast from "../hooks/useShowToast";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { chatsAtom, selectedChatAtom } from "../atom/messageAtom";
+import userAtom from "../atom/userAtom";
+import { useSocket } from "../context/SocketContext";
 
 const ChatPage = () => {
   const showToast = useShowToast();
   const [loadingChats, setLoadingChats] = useState(true);
   const [chats, setChats] = useRecoilState(chatsAtom);
   const [selectedChat, setSelectedChat] = useRecoilState(selectedChatAtom);
+  const currentUser = useRecoilValue(userAtom);
+  const [searchText, setSearchText] = useState("");
+  const [searchingUser, setSearchingUser] = useState(false);
+  const { socket, onlineUsers } = useSocket();
+
   useEffect(() => {
     const getChats = async () => {
       try {
@@ -40,6 +47,63 @@ const ChatPage = () => {
     };
     getChats();
   }, [setChats]);
+
+  const handleSearchChat = async (e) => {
+    e.preventDefault();
+    setSearchingUser(true);
+    try {
+      const res = await fetch(`/api/users/profile/${searchText}`);
+      const searchedUser = await res.json();
+      if (searchedUser.error) {
+        showToast("Error", searchedUser.error, "error");
+        return;
+      }
+
+      //if user is trying to message themselves
+      const messagingYourSelf = searchedUser._id === currentUser._id;
+      if (messagingYourSelf) {
+        showToast("Error", "You cannot message yourself", "error");
+        return;
+      }
+
+      //if user already have a conversation with them
+      const chatAlreadyExist = chats.find(
+        (chat) => chat.participants[0]._id === searchedUser._id
+      );
+      if (chatAlreadyExist) {
+        setSelectedChat({
+          _id: chatAlreadyExist._id,
+          userId: searchedUser._id,
+          username: searchedUser.username,
+          userProfilePic: searchedUser.profilePic,
+        });
+        return;
+      }
+
+      const mockConversation = {
+        mock: true,
+        lastMessage: {
+          text: "",
+          sender: "",
+        },
+        _id: Date.now(),
+        participants: [
+          {
+            _id: searchedUser._id,
+            username: searchedUser.username,
+            userProfilePic: searchedUser.profilePic,
+          },
+        ],
+      };
+
+      setChats((prevChats) => [...prevChats, mockConversation]);
+    } catch (error) {
+      showToast("Error", error.message, "error");
+    } finally {
+      setSearchingUser(false);
+      setSearchText("");
+    }
+  };
 
   return (
     <Box
@@ -78,10 +142,18 @@ const ChatPage = () => {
           >
             Chats
           </Text>
-          <form>
+          <form onSubmit={handleSearchChat}>
             <Flex alignItems={"center"} gap={2}>
-              <Input placeholder="Search user...." />
-              <Button size={"sm"}>
+              <Input
+                placeholder="Search user...."
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+              <Button
+                size={"sm"}
+                onClick={handleSearchChat}
+                isLoading={searchingUser}
+              >
                 <Search2Icon />
               </Button>
             </Flex>
@@ -101,7 +173,13 @@ const ChatPage = () => {
             ))}
 
           {!loadingChats &&
-            chats.map((chat) => <Conversation key={chat._id} chat={chat} />)}
+            chats.map((chat) => (
+              <Conversation
+                key={chat._id}
+                chat={chat}
+                isOnline={onlineUsers.includes(chat.participants[0]._id)}
+              />
+            ))}
         </Flex>
         {!selectedChat._id && (
           <Flex

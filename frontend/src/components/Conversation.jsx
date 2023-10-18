@@ -15,7 +15,7 @@ import userAtom from "../atom/userAtom";
 import { BsCheck2All } from "react-icons/bs";
 import { selectedChatAtom } from "../atom/messageAtom";
 
-const Conversation = ({ chat }) => {
+const Conversation = ({ chat, isOnline }) => {
   const user = chat.participants[0];
   const lastMessage = chat.lastMessage;
   const currentUser = useRecoilValue(userAtom);
@@ -38,6 +38,7 @@ const Conversation = ({ chat }) => {
           userId: user._id,
           username: user.username,
           userProfilePic: user.profilePic,
+          mock: chat.mock,
         });
       }}
       bg={
@@ -58,7 +59,7 @@ const Conversation = ({ chat }) => {
           src={user.profilePic}
           name={user.username}
         >
-          <AvatarBadge boxSize={"1em"} bg={"green.600"} />
+          {isOnline ? <AvatarBadge boxSize={"1em"} bg={"green.600"} /> : ""}
         </Avatar>
       </WrapItem>
       <Stack direction={"column"} fontSize={"sm"}>

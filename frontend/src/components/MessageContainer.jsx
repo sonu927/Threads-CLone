@@ -8,13 +8,14 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import MessageInput from "./MessageInput";
 import useShowToast from "../hooks/useShowToast";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { selectedChatAtom } from "../atom/messageAtom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { chatsAtom, selectedChatAtom } from "../atom/messageAtom";
 import userAtom from "../atom/userAtom";
+import { useSocket } from "../context/SocketContext";
 
 const MessageContainer = () => {
   const showToast = useShowToast();
@@ -22,12 +23,44 @@ const MessageContainer = () => {
   const currentUser = useRecoilValue(userAtom);
   const [loadingMessages, setLoadingMessages] = useState(true);
   const [messages, setMessages] = useState([]);
+  const { socket } = useSocket();
+  const setChats = useSetRecoilState(chatsAtom);
+  const messageEndRef = useRef(null);
+
+  useEffect(() => {
+    socket.on("newMessage", (message) => {
+      console.log(message);
+      if (selectedChat._id === message.conversationId) {
+        setMessages((prevMsg) => [...prevMsg, message]);
+      }
+
+      setChats((prev) => {
+        const updatedChats = prev.map((chat) => {
+          if (chat._id === message.conversationId) {
+            return {
+              ...chat,
+              lastMessage: {
+                text: message.text,
+                sender: message.sender,
+              },
+            };
+          }
+          return chat;
+        });
+        return updatedChats;
+      });
+    });
+
+    return () => socket.off("newMessage");
+  }, [socket]);
 
   useEffect(() => {
     const getMessages = async () => {
       setLoadingMessages(true);
       setMessages([]);
+
       try {
+        if (selectedChat.mock) return;
         const res = await fetch(`/api/messages/${selectedChat.userId}`);
         const data = await res.json();
         if (data.error) {
@@ -43,6 +76,10 @@ const MessageContainer = () => {
     };
     getMessages();
   }, [selectedChat.userId]);
+
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
   return (
     <Flex
       flex={70}
@@ -96,15 +133,24 @@ const MessageContainer = () => {
 
         {!loadingMessages &&
           messages.map((message) => (
-            <Message
+            <Flex
               key={message._id}
-              message={message}
-              ownMessage={currentUser._id === message.sender}
-            />
+              direction={"column"}
+              ref={
+                messages.length - 1 === messages.indexOf(message)
+                  ? messageEndRef
+                  : null
+              }
+            >
+              <Message
+                message={message}
+                ownMessage={currentUser._id === message.sender}
+              />
+            </Flex>
           ))}
       </Flex>
 
-      <MessageInput />
+      <MessageInput setMessages={setMessages} />
     </Flex>
   );
 };
