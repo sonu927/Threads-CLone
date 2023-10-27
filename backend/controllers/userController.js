@@ -207,6 +207,39 @@ const updateUser = async (req, res) => {
   }
 };
 
+const getSuggestedUsers = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const curr_user = await User.findById(userId);
+    console.log(curr_user);
+
+    const followingIds = curr_user.following.map((id) => {
+      return new mongoose.Types.ObjectId(id);
+    });
+
+    const suggestedUsers = await User.find({
+      _id: { $nin: followingIds },
+    })
+      .select("-password")
+      .select("-updatedAt");
+
+    const resultArray = suggestedUsers.filter((user) => {
+      if (user._id.toString() !== curr_user._id.toString()) {
+        return user;
+      }
+    });
+
+    if (suggestedUsers) {
+      return res.status(200).json(resultArray);
+    } else {
+      return res.status(200).json("All user are followed by you");
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+    console.log("Error in getSuggestedUsers:", err.message);
+  }
+};
+
 export {
   signupUser,
   loginUser,
@@ -214,4 +247,5 @@ export {
   followUnfollowuser,
   updateUser,
   getUserProfile,
+  getSuggestedUsers,
 };

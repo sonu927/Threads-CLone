@@ -3,11 +3,12 @@ import UserHeader from "../components/UserHeader";
 import UserPost from "../components/UserPost";
 import { useParams } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
-import { Flex, Spinner } from "@chakra-ui/react";
+import { Flex, Spinner, Text } from "@chakra-ui/react";
 import Post from "../components/Post";
 import useGetUserProfile from "../hooks/useGetUserProfile";
 import { useRecoilState } from "recoil";
 import postsAtom from "../atom/postsAtom";
+import { FaCameraRetro } from "react-icons/fa";
 
 const UserPage = () => {
   const { user, loading } = useGetUserProfile();
@@ -49,7 +50,21 @@ const UserPage = () => {
       <UserHeader user={user} />
 
       {!fetchingPosts && posts.length === 0 && (
-        <h1>User don't have any posts</h1>
+        <Flex
+          direction={"column"}
+          gap={"5px"}
+          mt={4}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <FaCameraRetro size={100} />
+          <Text fontSize={"lg"} fontWeight={"bold"}>
+            No Posts
+          </Text>
+          <Text>
+            Please create a Post by clicking + in the bottom right corner
+          </Text>
+        </Flex>
       )}
 
       {fetchingPosts && (
