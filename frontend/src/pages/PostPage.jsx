@@ -11,7 +11,7 @@ import {
 import { React, useEffect, useState } from "react";
 import Comment from "../components/Comment";
 import useGetUserProfile from "../hooks/useGetUserProfile";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
 import Actions from "../components/Actions";
 import { formatDistanceToNow } from "date-fns";
@@ -39,7 +39,6 @@ const PostPage = () => {
           showToast("Error", data.error, "error");
           return;
         }
-        console.log(data);
         setPosts([data]);
       } catch (error) {
         showToast("Error", error.message, "error");
@@ -82,15 +81,18 @@ const PostPage = () => {
   return (
     <>
       <Flex>
-        <Flex w={"full"} alignItems={"center"} gap={3}>
-          <Avatar src={user.profilePic} size={"md"} name={user.username} />
-          <Flex alignItems={"center"}>
-            <Text fontSize={"sm"} fontWeight={"bold"}>
-              {user?.username}
-            </Text>
-            <Image src="/verified.png" w={4} h={4} ml={2} />
+        <Link to={`/${user.username}`}>
+          <Flex w={"full"} alignItems={"center"} gap={3}>
+            <Avatar src={user.profilePic} size={"md"} name={user.username} />
+            <Flex alignItems={"center"}>
+              <Text fontSize={"sm"} fontWeight={"bold"}>
+                {user?.username}
+              </Text>
+              <Image src="/verified.png" w={4} h={4} ml={2} />
+            </Flex>
           </Flex>
-        </Flex>
+        </Link>
+
         <Flex gap={4} alignItems={"center"}>
           <Text
             fontSize={"xs"}

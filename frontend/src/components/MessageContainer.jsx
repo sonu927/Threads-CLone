@@ -29,7 +29,7 @@ const MessageContainer = () => {
 
   useEffect(() => {
     socket.on("newMessage", (message) => {
-      console.log(message);
+      //console.log(message);
       if (selectedChat._id === message.conversationId) {
         setMessages((prevMsg) => [...prevMsg, message]);
       }
