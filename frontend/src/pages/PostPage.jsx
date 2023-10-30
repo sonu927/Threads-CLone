@@ -80,7 +80,7 @@ const PostPage = () => {
 
   return (
     <>
-      <Flex>
+      <Flex justifyContent={"space-between"}>
         <Link to={`/${user.username}`}>
           <Flex w={"full"} alignItems={"center"} gap={3}>
             <Avatar src={user.profilePic} size={"md"} name={user.username} />
