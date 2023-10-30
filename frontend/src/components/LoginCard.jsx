@@ -36,7 +36,7 @@ export default function LoginCard() {
     try {
       //console.log(inputs);
       const res = await fetch(
-        "https://threads-clone-api-fgv9.onrender.com/users/login",
+        "https://threads-clone-api-fgv9.onrender.com/api/users/login",
         {
           // "/api/users/login"
           method: "POST",
