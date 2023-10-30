@@ -35,14 +35,17 @@ export default function LoginCard() {
     setLoading(true);
     try {
       //console.log(inputs);
-      const res = await fetch("/users/login", {
-        // "/api/users/login"
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(inputs),
-      });
+      const res = await fetch(
+        "https://threads-clone-api-fgv9.onrender.com/users/login",
+        {
+          // "/api/users/login"
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(inputs),
+        }
+      );
       const data = await res.json();
       if (data.error) {
         showToast("Error", data.error, "error");
