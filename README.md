@@ -58,8 +58,14 @@ Created a social media wep application whose UI and functionalities are inspired
 ### Chat Page
 ![image](https://github.com/sonu927/Threads-CLone/assets/75172869/1588e1b1-4cbc-41cb-aa10-7d15987c913c)
 
+***
 
+## Setup Project in your systems
+1.) git clone the project in you system.
+2.) open terminal and reach project using cd <foldername> and then go into frontend folder using cd , then do npm install in terminal to install all dependencies.
+3.) I have hosted my backend so you can just use that by setting my frontend and start it by npm run dev in terminal but if you want to set up backend too then follow step-2 for backend and in frontend folder open vite.config.js and change target of "/api" to your localhost of backend like http://localhost:5000. 
 
+Hope you like this project 😄
 
 
 
