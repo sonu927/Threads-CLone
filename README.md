@@ -1,6 +1,6 @@
 # Threads-CLone
 Created a social media wep application whose UI and functionalities are inspired by Threads.
-
+***
 ## Tech and Tools used
 <div align="left" gap="5px">
 	<code><img width="70" src="https://user-images.githubusercontent.com/25181517/182884177-d48a8579-2cd0-447a-b9a6-ffc7cb02560e.png" alt="mongoDB" title="mongoDB"/></code>
@@ -16,6 +16,15 @@ Created a social media wep application whose UI and functionalities are inspired
 	<code><img width="70" src="https://github.com/marwin1991/profile-technology-icons/assets/62091613/b40892ef-efb8-4b0e-a6b5-d1cfc2f3fc35" alt="Vite" title="Vite"/></code>
 	<p>Vite</p>
 </div>
+***
+## Features
+* Users can signup and login , authentication and authorization is done through jsonwebtokens.
+* Users can create posts with image and caption or a simple post with text only , image uploads are taken care with cloudinary.(to check it out visit - https://cloudinary.com/)
+* Users can like and reply on a post and to check all replies they can open post by clicking on it.
+* Users can update their profile details by visiting their profile page.
+* Users can chat with people they follow by clicking on chat icon and seaching the user they want to chat with.
+* Users can switch between light and dark theme by clicking on Threads icon on top.
+
 
 
 
