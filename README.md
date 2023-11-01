@@ -2,7 +2,7 @@
 Created a social media wep application whose UI and functionalities are inspired by Threads.
 
 ## Tech and Tools used
-<div align="center" gap="5px">
+<div align="left" gap="5px">
 	<code><img width="70" src="https://user-images.githubusercontent.com/25181517/182884177-d48a8579-2cd0-447a-b9a6-ffc7cb02560e.png" alt="mongoDB" title="mongoDB"/>
 	</code>
 	<p>MongoDB</p>
