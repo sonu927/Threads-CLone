@@ -16,7 +16,10 @@ Created a social media wep application whose UI and functionalities are inspired
 	<code><img width="70" src="https://github.com/marwin1991/profile-technology-icons/assets/62091613/b40892ef-efb8-4b0e-a6b5-d1cfc2f3fc35" alt="Vite" title="Vite"/></code>
 	<p>Vite</p>
 </div>
+
+
 ***
+
 ## Features
 * Users can signup and login , authentication and authorization is done through jsonwebtokens.
 * Users can create posts with image and caption or a simple post with text only , image uploads are taken care with cloudinary.(to check it out visit - https://cloudinary.com/)
