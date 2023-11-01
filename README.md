@@ -33,7 +33,7 @@ Created a social media wep application whose UI and functionalities are inspired
 ## Snapshots of application
 
 ### SignUP and LogIn
-![image](https://github.com/sonu927/Threads-CLone/assets/75172869/28e2f5ba-611a-4dab-ab84-e6a380f1b5a1)![image](https://github.com/sonu927/Threads-CLone/assets/75172869/c8e755c0-944d-4a3f-a27c-eee68222d256)
+![image](https://github.com/sonu927/Threads-CLone/assets/75172869/c53e5654-dad9-4bdb-b6f8-f2902ca116c4)![image](https://github.com/sonu927/Threads-CLone/assets/75172869/c8e755c0-944d-4a3f-a27c-eee68222d256)
 
 
 
