@@ -28,6 +28,13 @@ Created a social media wep application whose UI and functionalities are inspired
 * Users can chat with people they follow by clicking on chat icon and seaching the user they want to chat with.
 * Users can switch between light and dark theme by clicking on Threads icon on top.
 
+***
+
+## Snapshots of application
+
+### SignUP and LogIn
+![image](https://github.com/sonu927/Threads-CLone/assets/75172869/28e2f5ba-611a-4dab-ab84-e6a380f1b5a1)![image](https://github.com/sonu927/Threads-CLone/assets/75172869/c8e755c0-944d-4a3f-a27c-eee68222d256)
+
 
 
 
